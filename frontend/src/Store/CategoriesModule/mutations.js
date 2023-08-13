@@ -11,4 +11,10 @@ export default {
     );
     state.categories[indexToUpdate] = payload;
   },
+  deleteCategory(state, payload) {
+    const indexToDelete = state.categories.findIndex(
+      (c) => c.categoryId === payload
+    );
+    state.categories.splice(indexToDelete, 1);
+  },
 };

@@ -21,11 +21,8 @@ export default {
   async addCategory(context, category) {
     try {
       const response = await axios.post(appConfig.categoriesUrl, category);
-      if (response.status === 200) {
-        context.commit("addCategory", category);
-      } else {
-        throw new Error("Failed to add category");
-      }
+      if (response.status === 200) context.commit("addCategory", category);
+      else throw new Error("Failed to add category");
     } catch (err) {
       throw new Error(err.message);
     }
@@ -36,11 +33,17 @@ export default {
         appConfig.categoriesUrl + category.categoryId,
         category
       );
-      if (response.status === 200) {
-        context.commit("editCategory", category);
-      } else {
-        throw new Error("failed to add category");
-      }
+      if (response.status === 200) context.commit("editCategory", category);
+      else throw new Error("failed to add category");
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  },
+  async removeCategory(context, categoryId) {
+    try {
+      const response = await axios.delete(appConfig.categoriesUrl + categoryId);
+      if (response.status === 204) context.commit("deleteCategory", categoryId);
+      else throw new Error("Failed to delete Category");
     } catch (err) {
       throw new Error(err.message);
     }

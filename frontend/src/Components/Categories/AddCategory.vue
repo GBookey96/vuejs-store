@@ -1,34 +1,66 @@
 <template>
-  <base-card>
-    <form @submit.prevent="submitForm">
-      <div class="form-control">
+  <div>
+    <base-dialog
+      :show="!!errors"
+      title="An error occurred!"
+      @close="handleError"
+    >
+      <p>{{ errors }}</p>
+    </base-dialog>
+    <base-card>
+      <form @submit.prevent="submitForm">
         <div class="form-control">
-          <label for=""> Category Name </label>
-          <input type="text" name="" id="" v-model.trim="catName" />
+          <div class="form-control">
+            <label for=""> Category Name </label>
+            <input type="text" name="" id="" v-model.trim="categoryName" />
+          </div>
+          <div class="form-control">
+            <label for=""> Category Description </label>
+            <textarea
+              name=""
+              id=""
+              cols="30"
+              rows="10"
+              v-model.trim="categoryDescription"
+            ></textarea>
+          </div>
         </div>
-        <div class="form-control">
-          <label for=""> Category Description </label>
-          <textarea
-            name=""
-            id=""
-            cols="30"
-            rows="10"
-            v-model.trim="catDescription"
-          ></textarea>
-        </div>
-      </div>
 
-      <base-button>Add category</base-button>
-    </form>
-  </base-card>
+        <base-button>Add category</base-button>
+      </form>
+    </base-card>
+  </div>
 </template>
 
 <script>
 export default {
-  data() {},
+  data() {
+    return {
+      categoryName: null,
+      categoryDescription: null,
+      errors: null,
+    };
+  },
+  methods: {
+    async submitForm() {
+      const newCategory = {
+        categoryName: this.categoryName,
+        categoryDescription: this.categoryDescription,
+      };
+
+      try {
+        await this.$store.dispatch("categories/addCategory", newCategory);
+        this.$router.replace("products");
+      } catch (err) {
+        this.errors = "An error occurred. Please try again later";
+      }
+    },
+    handleError() {
+      this.errors = null;
+    },
+  },
 };
 </script>
-
 
 <style scoped>
 form {

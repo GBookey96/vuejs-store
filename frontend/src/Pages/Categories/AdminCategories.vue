@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       errors: null,
-      action: "edit",
+      action: null,
     };
   },
   methods: {
